@@ -1,13 +1,25 @@
 $(document).ready(function() {
-  // alert('Welcome to The Chat Room!');
+  alert('Welcome to The Chat Room!');
   var server = io.connect('http://localhost:3000');
   var inputField = $('#field');
   var chatArea = $('#chatArea');
 
   server.on('connect', function (data) {
-    chatArea.append('Hi! Welcome to The Chat Room!<br>');
-    nickname = prompt("What's your nickname?");
-    server.emit('join', nickname);
+    var getName = function() {
+      nickname = prompt("What's your nickname?");
+      if (nickname == "") {
+        getName();
+      }
+      else {
+        server.emit('join', nickname);
+        chatArea.append('<p id="welcome">Hi ' + nickname + 
+                        '! Welcome to The Chat Room!</p>');
+        setTimeout(function() {
+          chatArea.find('#welcome').fadeOut(2000);
+        }, 2000);
+      }
+    }
+    getName();
   });
 
   server.on('message', function (data) {

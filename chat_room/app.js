@@ -11,11 +11,10 @@ app.get('/', function (req, res) {
   res.render('index');
 });
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
 
 io.sockets.on('connection', function (client) {
   console.log('Client connected...');
-  // client.emit('message', { nickname: 'Hi! ', message: 'Welcome to the chat' });
 
   client.on('join', function (name) {
     client.nickname = name;
