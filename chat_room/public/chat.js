@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  // alert('Welcome to The Chat Room!');
+  alert('Welcome to The Chat Room!');
   var server = io.connect('http://localhost:3000'),
       inputField = $('#field'),
       chatArea = $('#chatArea'),
