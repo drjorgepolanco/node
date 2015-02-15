@@ -1,8 +1,9 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = 3000;
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io')(server),
+    port = 3000,
+    nickname;
 
 app.set('views', __dirname + '/tpl');
 app.set('view engine', 'jade');
@@ -21,7 +22,7 @@ io.sockets.on('connection', function (client) {
   });
 
   client.on('send', function (data) {
-    var nickname = client.nickname;
+    nickname = client.nickname;
     console.log(data.nickname + " says: '" + data.message + "'");
     io.sockets.emit('message', data);
   });
