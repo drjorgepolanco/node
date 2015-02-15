@@ -4,16 +4,31 @@ var express = require('express'),
     io = require('socket.io')(server),
     port = 3000,
     nickname,
-    messages = [];
+    messages = [],
+    redis = require('redis'),
+    redisClient = redis.createClient(),
+    storeMessage;
 
-var storeMessage = function (nickname, message) {
-  messages.push({ 
-    nickname: nickname, 
-    message: message 
+// Storing without database
+// ========================
+// var storeMessage = function (nickname, message) {
+//   messages.push({ 
+//     nickname: nickname, 
+//     message: message 
+//   });
+//   if (messages.length > 10) {
+//     messages.shift();
+//   }
+// }
+
+storeMessage = function (nickname, message) {
+  var data = JSON.stringify({
+    nickname: nickname,
+    message: message
   });
-  if (messages.length > 10) {
-    messages.shift();
-  }
+  redisClient.lpush('messages', data, function (err, response) {
+    redisClient.ltrim('messages', 0, 9);
+  });
 }
 
 app.set('views', __dirname + '/tpl');
@@ -28,11 +43,24 @@ app.use(express.static(__dirname + '/public'));
 io.sockets.on('connection', function (client) {
   console.log('Client connected...');
 
+  // Emiting without database
+  // ========================
+  // client.on('join', function (name) {
+  //   client.nickname = name;
+  //   messages.forEach(function (data) {
+  //     client.emit('message', data);
+  //     console.log(data);
+  //   });
+  // });
+
   client.on('join', function (name) {
     client.nickname = name;
-    messages.forEach(function (data) {
-      client.emit('message', data);
-      console.log(data);
+    redisClient.lrange('messages', 0, -1, function (error, messages) {
+      messages = messages.reverse();
+      messages.forEach(function (message) {
+        message = JSON.parse(message);
+        client.emit('message', message);
+      });
     });
   });
 
