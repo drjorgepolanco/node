@@ -7,7 +7,10 @@ var express = require('express'),
     messages = [];
 
 var storeMessage = function (nickname, message) {
-  messages.push({ nickname: nickname, message: message });
+  messages.push({ 
+    nickname: nickname, 
+    message: message 
+  });
   if (messages.length > 10) {
     messages.shift();
   }
