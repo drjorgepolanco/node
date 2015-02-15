@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  alert('Welcome to The Chat Room!');
+  // alert('Welcome to The Chat Room!');
   var server = io.connect('http://localhost:3000'),
       inputField = $('#field'),
       chatArea = $('#chatArea'),
@@ -16,6 +16,7 @@ $(document).ready(function () {
         server.emit('join', nickname);
         chatArea.append('<p id="welcome">Hi ' + nickname + 
                         '! Welcome to The Chat Room!</p>');
+        console.log(nickname + ' joined the chat!');
         setTimeout(function () {
           chatArea.find('#welcome').fadeOut(2000);
         }, 2000);

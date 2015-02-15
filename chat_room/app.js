@@ -3,7 +3,15 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io')(server),
     port = 3000,
-    nickname;
+    nickname,
+    messages = [];
+
+var storeMessage = function (nickname, message) {
+  messages.push({ nickname: nickname, message: message });
+  if (messages.length > 10) {
+    messages.shift();
+  }
+}
 
 app.set('views', __dirname + '/tpl');
 app.set('view engine', 'jade');
@@ -19,11 +27,16 @@ io.sockets.on('connection', function (client) {
 
   client.on('join', function (name) {
     client.nickname = name;
+    messages.forEach(function (data) {
+      client.emit('message', data);
+      console.log(data);
+    });
   });
 
   client.on('send', function (data) {
     nickname = client.nickname;
     console.log(data.nickname + " says: '" + data.message + "'");
+    storeMessage(data.nickname, data.message);
     io.sockets.emit('message', data);
   });
 });
