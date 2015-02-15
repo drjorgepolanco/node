@@ -13,12 +13,22 @@ app.get('/', function (req, res) {
 
 app.use(express.static(__dirname + '/public'))
 
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (client) {
   console.log('Client connected...');
-  socket.emit('message', { message: 'Welcome to the chat' });
-  socket.on('send', function (data) {
-    console.log(data);
+  client.emit('message', { message: 'Welcome to the chat' });
+
+  client.on('join', function (name) {
+    client.nickname = name;
+  });
+
+  client.on('send', function (data) {
+    var nickname = client.nickname;
+    // console.log(data.message);
+
     io.sockets.emit('message', data);
+    // client.broadcast.emit('message', nickname + ': ' + client.data);
+
+    // client.emit('message', nickname + ': ' + client.data);
   });
 });
 
