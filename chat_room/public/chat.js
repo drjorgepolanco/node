@@ -5,15 +5,15 @@ $(document).ready(function() {
   var chatArea = $('#chatArea');
 
   server.on('connect', function (data) {
-    $('#status').html('Connected to the Chat Room...');
+    chatArea.append('Hi! Welcome to The Chat Room!<br>');
     nickname = prompt("What's your nickname?");
     server.emit('join', nickname);
   });
 
   server.on('message', function (data) {
-    console.log(data.message);
+    console.log(data.nickname + " says: '" + data.message + "'");
     if (data) {
-      chatArea.append(nickname + ": " + data.message + '<br>');
+      chatArea.append(data.nickname + ": " + data.message + '<br>');
     }
     else {
       console.log('This is not working, my friend:', data);

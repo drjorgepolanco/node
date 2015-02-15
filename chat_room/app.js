@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/public'))
 
 io.sockets.on('connection', function (client) {
   console.log('Client connected...');
-  client.emit('message', { message: 'Welcome to the chat' });
+  // client.emit('message', { nickname: 'Hi! ', message: 'Welcome to the chat' });
 
   client.on('join', function (name) {
     client.nickname = name;
@@ -23,12 +23,8 @@ io.sockets.on('connection', function (client) {
 
   client.on('send', function (data) {
     var nickname = client.nickname;
-    // console.log(data.message);
-
+    console.log(data.nickname + " says: '" + data.message + "'");
     io.sockets.emit('message', data);
-    // client.broadcast.emit('message', nickname + ': ' + client.data);
-
-    // client.emit('message', nickname + ': ' + client.data);
   });
 });
 
