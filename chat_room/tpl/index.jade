@@ -3,15 +3,18 @@ html
   head
     title= "The Chat Room"
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+    style(type='text/css').
+      h1 {
+        text-align: center;
+      }
 
   body
     .container
       h1 The Chat Room
-    .container#status
     .container
       .row
-        .col-lg-6
-          .container#chatArea.form-control(style='height: 200px; margin: 0 0 20px 0; overflow-y: scroll;')
+        .col-lg-6.col-lg-offset-3
+          .container#chatArea.form-control(style='height: 400px; margin: 0 0 20px 0; overflow-y: scroll;')
           form.form-group.input-group
             input.control-label.form-control#field(type='text', placeholder='enter text here', autofocus)
             .input-group-btn
