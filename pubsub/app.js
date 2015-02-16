@@ -9,4 +9,8 @@ app.use(express.json()); // It parses incoming JSON data
 
 app.post('/', badges.save, badges.send);
 
-app.listen(8000);
+app.get('/badges', badges.get);
+
+app.listen(8000, function() {
+  console.log('Server is listening on port %d', 8000);
+});
